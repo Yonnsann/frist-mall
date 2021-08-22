@@ -12,12 +12,7 @@
           GoodsListItem
         },
         props: {
-            goods: {
-                type: Array,
-                default() {
-                    return []
-                }
-            }
+            goods:null
 
         }
     }

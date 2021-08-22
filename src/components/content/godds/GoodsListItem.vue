@@ -1,7 +1,7 @@
 <template>
     <div class="goods-item" @click="itemClick">
-<!--        @load监听图片是否加载完成-->
-        <img :src="goodsItem.show.img" alt="" @load="imageLoad">
+        <!--        @load监听图片是否加载完成-->
+        <img v-lazy="showImage" alt="" @load="imageLoad">
         <div class="goods-info">
             <p>{{goodsItem.title}}</p>
             <span class="price">{{goodsItem.price}}</span>
@@ -13,22 +13,27 @@
 <script>
     export default {
         name: "GoodsListItem",
-        props:{
-            goodsItem:{
-                type:Object,
-                default(){
-                    return{}
+        props: {
+            goodsItem: {
+                type: Object,
+                default() {
+                    return {}
                 }
             }
         },
-        methods:{
-            imageLoad(){
+        computed: {
+            showImage() {
+                return this.goodsItem.image || this.goodsItem.show.img
+            }
+        },
+        methods: {
+            imageLoad() {
                 // 通过$bus.$emit发送出去，使用$bus.$on来接收，从而调用这个方法 ($bus需要在main.js里面注册)
                 this.$bus.$emit('itemImageLoad')
             },
-            itemClick(){
+            itemClick() {
                 // 需要返回所以不要用replace
-                this.$router.push('/detail/'+ this.goodsItem.iid)
+                this.$router.push('/detail/' + this.goodsItem.iid)
                 // // query传递参数
                 // this.$router.push({
                 //     path:'/detail',
@@ -48,6 +53,7 @@
         width: calc(50% - 10px);
         margin: 10px 5px 0;
     }
+
     .goods-item img {
         width: 100%;
         border-radius: 5px;

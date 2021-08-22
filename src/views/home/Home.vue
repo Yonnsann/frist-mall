@@ -40,7 +40,8 @@
     import BackTop from "@/components/content/backtop/BackTop";
 
     import {getHomeMultidata, getHomeGodds} from "@/network/home";
-    import {bebounce} from "../../common/utils"
+    import {itemListenerMixin} from "@/common/mixin";
+    import {BACKTOP_POSITION} from "@/common/const"
 
 
     export default {
@@ -69,7 +70,8 @@
                 isShowBackTop: false,
                 tabOffsetTop:0,
                 isTabFixed:false,
-                saveY:0
+                saveY:0,
+                itemImgListener:null
             }
         },
         computed: {
@@ -80,12 +82,14 @@
         activated(){
 
             this.$refs.scroll.refresh()
-            // 1.活动时(当前页面)调用,上一层必须要keep-alive属性
+            // 活动时(当前页面)调用,上一层必须要keep-alive属性
             this.$refs.scroll.scrollTo(0,this.saveY,0)
         },
         deactivated(){
-            // 2.离开页面时调用,上一层必须要keep-alive属性
+            // 1.离开页面时调用,上一层必须要keep-alive属性
             this.saveY=this.$refs.scroll.getScroolY()
+            // 2.取消全局事件的监听
+            this.$bus.$off('imgLoad')
             // console.log(this.saveY)
         },
         created() {
@@ -101,15 +105,7 @@
             this.getHomeGoods('sell')
 
         },
-        mounted(){
-            // 1.监听图片加载完成
-            const refresh= bebounce(this.$refs.scroll.refresh,500)
-            this.$bus.$on('itemImageLoad', () => {
-                // 每次拿到一个图片就刷新
-                // this.$refs.scroll && this.$refs.scroll.refresh()
-                refresh()
-            })
-        },
+        mixins:[itemListenerMixin],
         methods: {
             /**
              * 事件监听相关的方法
@@ -134,11 +130,11 @@
              * 网络请求相关的方法
              * **/
             getHomeGoods(type) {
-                const page = this.goods[type].page + 1
+                const page = this.goods[type].page + 1;
                 getHomeGodds(type, page).then(res => {
                     // 箭头函数的指针会向上一个层级指向，所以这里的this指向没有问题
                     // 对res.data.list数组做解析，然后一个个push进去
-                    this.goods[type].list.push(...res.data.list)
+                    this.goods[type].list.push(...res.data.list);
                     this.goods[type].page += 1
 
                     // 完成上拉加载更多
@@ -147,11 +143,11 @@
             },
             backClick() {
                 // 找到ref='scroll'的组件，然后调用这个组件的scroll对象里面的scrollTo方法回到顶部
-                this.$refs.scroll.scrollTo(0, 0)
+                this.$refs.scroll.scrollTo(0, 0,300)
             },
             contentScroll(position) {
                 // 1.判断BackTop是否显示
-                this.isShowBackTop = position.y < -1000
+                this.isShowBackTop = position.y < BACKTOP_POSITION
                 // 2.绝对TabControl是否吸顶(position:fixed)
                 this.isTabFixed = (-position.y) > this.tabOffsetTop
             },
