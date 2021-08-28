@@ -27,7 +27,7 @@
             itemClick(index) {
                 this.currentIndex=index;
                 // 把点击事件传出去
-                this.$emit('tabClick',index)
+                this.$emit('itemClick',index)
             }
         }
     }

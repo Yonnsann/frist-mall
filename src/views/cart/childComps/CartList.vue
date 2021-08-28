@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import Scroll from '../../../components/common/scorll/Scroll'
+    import Scroll from '../../../components/common/scroll/Scroll'
     import CartListItem from './CartListItem'
 
     export default {

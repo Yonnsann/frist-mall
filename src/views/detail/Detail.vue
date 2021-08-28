@@ -26,7 +26,7 @@
     import DetailCommentInfo from "@/views/detail/childComps/DetailCommentInfo";
     import DetailBottomBar from "./childComps/DetailBottomBar";
 
-    import Scroll from "@/components/common/scorll/Scroll";
+    import Scroll from "@/components/common/scroll/Scroll";
     import GoodsList from "@/components/content/godds/GoodsList";
     import BackTop from "@/components/content/backtop/BackTop";
 
