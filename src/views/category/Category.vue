@@ -4,17 +4,19 @@
             <div slot="center">商品分类</div>
         </nav-bar>
         <div class="content">
-            <tab-menu :categories="categories"
+            <tab-menu class="tab-menu" :categories="categories"
                       @selectItem="selectItem"></tab-menu>
 
-            <scroll id="tab-content" :data="[categoryData]">
+            <Scroll id="tab-content"
+                    :data="[categoryData]"
+                    :probe-type="3">
                 <div>
                     <tab-content-category :subcategories="showSubcategory"></tab-content-category>
                     <tab-control :titles="['综合', '新品', '销量']"
                                  @itemClick="tabClick"></tab-control>
                     <tab-content-detail :category-detail="showCategoryDetail"></tab-content-detail>
                 </div>
-            </scroll>
+            </Scroll>
         </div>
     </div>
 </template>
@@ -119,7 +121,11 @@
 
 <style scoped>
     #category {
+        position: relative;
         height: 100vh;
+        margin: 0 auto;
+        padding: 0 auto;
+
     }
 
     .nav-bar {
@@ -138,8 +144,16 @@
         display: flex;
     }
 
+    .tab-menu{
+        overflow: hidden;
+    }
     #tab-content {
+        overflow: hidden;
         height: 100%;
         flex: 1;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
     }
 </style>
